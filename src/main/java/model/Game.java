@@ -2,7 +2,10 @@ package model;
 
 import strategies.winningstrategy.WinningStrategy;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Game {
     private Board board;
@@ -12,7 +15,18 @@ public class Game {
     private GameState gameState;
     private int nextMovePlayerIndex;
     private List<WinningStrategy> winningStrategies;
+    private Game(int dimension, List<Player> players, List<WinningStrategy> winningStrategies){
+        this.board = new Board(dimension);
+        this.players = players;
+        this.nextMovePlayerIndex = 0;
+        this.gameState = GameState.IN_PROGRESS;
+        this.moves = new ArrayList<>();
+        this.winningStrategies = winningStrategies;
+    }
 
+    public static Builder getBuilder(){
+        return new Builder();
+    }
     public Board getBoard() {
         return board;
     }
@@ -67,6 +81,85 @@ public class Game {
 
     public void setNextMovePlayerIndex(int nextMovePlayerIndex) {
         this.nextMovePlayerIndex = nextMovePlayerIndex;
+    }
+
+    public void printBoard(){
+        board.printBoard();
+    }
+
+    public Move makeMove(){
+        return null;
+    }
+
+    public static class Builder{
+        private int dimension;
+        private List<Player> players;
+        private List<WinningStrategy> winningStrategies;
+
+        private Builder(){
+            this.players = new ArrayList<>();
+            this.dimension = 0;
+            this.winningStrategies = new ArrayList<>();
+        }
+        private void validations(){
+            if(dimension<=0){
+                throw new RuntimeException("Dimensions cannot be negative");
+            }
+            validateBotCount();
+            validateUniqueSymbols();
+        }
+        private void validateBotCount(){
+            int count = 0;
+            for(Player player : players){
+                if(player.getPlayerType().equals(PlayerType.BOT)){
+                    count ++;
+                }
+                if(count>1){
+                    throw new RuntimeException("Only one BOT is allowed in a game");
+                }
+            }
+        }
+        private void validateUniqueSymbols(){
+            Set<Character> symbols = new HashSet<>();
+            for(Player player:players){
+                if(symbols.contains(player.getSymbol().getaChar())){
+                    throw new RuntimeException("Symbol for each player should be unique");
+                }
+                else{
+                    symbols.add(player.getSymbol().getaChar());
+                }
+            }
+        }
+        public Game build(){
+            validations();
+            return new Game(dimension, players, winningStrategies);
+        }
+        public int getDimension() {
+            return dimension;
+        }
+
+        public Builder setDimension(int dimension) {
+            this.dimension = dimension;
+            return this;
+        }
+
+        public List<Player> getPlayers() {
+            return players;
+        }
+
+        public Builder setPlayers(List<Player> players) {
+            this.players = players;
+            return this;
+        }
+
+        public List<WinningStrategy> getWinningStrategies() {
+            return winningStrategies;
+        }
+
+        public Builder setWinningStrategies(List<WinningStrategy> winningStrategies) {
+            this.winningStrategies = winningStrategies;
+            return this;
+        }
     }
 
 }

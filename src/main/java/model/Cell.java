@@ -2,6 +2,19 @@ package model;
 
 public class Cell {
     private int row;
+    private int col;
+    private CellState cellState;
+    private Player player;
+
+    public void display(){
+        if(player==null){
+             //cell is Empty
+            System.out.print("| -- |");
+        }
+        else{
+            System.out.print("| "+player.getSymbol().getaChar()+ " |");
+        }
+    }
 
     public Player getPlayer() {
         return player;
@@ -41,7 +54,4 @@ public class Cell {
         this.row = row;
     }
 
-    private int col;
-    private CellState cellState;
-    private Player player;
 }
