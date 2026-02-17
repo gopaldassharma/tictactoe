@@ -1,0 +1,31 @@
+package model;
+
+import factory.BotPlayingStrategyFactory;
+import strategies.botplayingstrategy.BotPlayingStrategy;
+
+public class Bot extends Player{
+    private BotDifficultyLevel botDifficultyLevel;
+    private BotPlayingStrategy botPlayingStrategy;
+
+    public BotDifficultyLevel getBotDifficultyLevel() {
+        return botDifficultyLevel;
+    }
+
+    public Bot(Symbol symbol, String name, PlayerType playerType, BotDifficultyLevel botDifficultyLevel) {
+        super(symbol, name, playerType);
+        this.botDifficultyLevel = botDifficultyLevel;
+        this.botPlayingStrategy = BotPlayingStrategyFactory.getBotPlayingStrategy(botDifficultyLevel);
+    }
+
+    public void setBotDifficultyLevel(BotDifficultyLevel botDifficultyLevel) {
+        this.botDifficultyLevel = botDifficultyLevel;
+    }
+
+    public BotPlayingStrategy getBotPlayingStrategy() {
+        return botPlayingStrategy;
+    }
+
+    public void setBotPlayingStrategy(BotPlayingStrategy botPlayingStrategy) {
+        this.botPlayingStrategy = botPlayingStrategy;
+    }
+}
