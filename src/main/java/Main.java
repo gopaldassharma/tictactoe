@@ -22,7 +22,7 @@ public class Main {
         playerList.add(
                 new Player(new Symbol('X'), "Gopal", PlayerType.HUMAN));
         playerList.add(
-                new Bot(new Symbol('O'), "Sharma", PlayerType.BOT, BotDifficultyLevel.EASY));
+                new Player(new Symbol('O'), "Sanskriti", PlayerType.HUMAN));
 
         List<WinningStrategy> winningStrategies = List.of(
                 new RowWinningStrategy(),

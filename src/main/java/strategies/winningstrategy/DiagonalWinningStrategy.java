@@ -25,13 +25,13 @@ public class DiagonalWinningStrategy implements WinningStrategy{
         }
 
         // Condition for right diagonal, row+col==N-1
-        if(row==col){
+        if(row+col== board.getDimension()-1){
             if(!rightDiagonalMap.containsKey(achar)){
                 rightDiagonalMap.put(achar, 0);
             }
             rightDiagonalMap.put(achar,rightDiagonalMap.get(achar)+1);
         }
-        if((row==col && leftDiagonalMap.get(achar)==board.getDimension()) || (row+col== board.getDimension()-1 && leftDiagonalMap.get(achar)==board.getDimension())){
+        if((row==col && leftDiagonalMap.get(achar)==board.getDimension()) || ((row+col)==board.getDimension()-1 && rightDiagonalMap.get(achar)==board.getDimension())){
             return true;
         }
         return false;
