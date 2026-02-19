@@ -1,5 +1,6 @@
 package controller;
 
+import exception.InvalidMoveException;
 import model.Game;
 import model.GameState;
 import model.Player;
@@ -19,14 +20,14 @@ public class GameController {
                 .setWinningStrategies(winningStrategies)
                 .build();
     }
-    public void makeMove(Game game){
-
+    public void makeMove(Game game) throws InvalidMoveException {
+        game.makeMove();
     }
     public GameState gameState(Game game){
         return game.getGameState();
     }
-    public void getWinner(Game game){
-
+    public Player getWinner(Game game){
+        return game.getWinner();
     }
     public void printBoard(Game game){
         game.printBoard();

@@ -1,5 +1,6 @@
 package model;
 
+import exception.InvalidMoveException;
 import strategies.winningstrategy.WinningStrategy;
 
 import java.util.ArrayList;
@@ -87,8 +88,56 @@ public class Game {
         board.printBoard();
     }
 
-    public Move makeMove(){
-        return null;
+    private boolean validateMove(Move move){
+         int row = move.getCell().getRow();
+         int col = move.getCell().getCol();
+
+         if(row<0 || row>= board.getDimension() || col<0 || col>= board.getDimension()){
+             return false;
+         }
+         // whether the cell at which player is trying to make a move is empty or not
+        if(!board.getBoard().get(row).get(col).getCellState().equals(CellState.EMPTY)){
+            return false;
+        }
+        return true;
+    }
+    public void makeMove() throws InvalidMoveException {
+        Player currentPlayer = players.get(nextMovePlayerIndex);
+        System.out.println("This is "+currentPlayer.getName()+"'s move");
+
+        // Player will choose ṭhe move that they want to make
+        Move move = currentPlayer.makeMove(board);
+
+        // Game will validate if the move made is valid or not
+        if(!validateMove(move)){
+            throw new InvalidMoveException("Invalid Move, Please retry");
+        }
+
+        // Move is valid so apply it to the board
+        int row  = move.getCell().getRow();
+        int col = move.getCell().getCol();
+        Cell cell = board.getBoard().get(row).get(col);
+        cell.setCellState(CellState.FILLED);
+        cell.setPlayer(currentPlayer);
+        nextMovePlayerIndex = (nextMovePlayerIndex+1)%players.size();
+        Move finalMove = new Move(currentPlayer, cell);
+        moves.add(finalMove);
+        if(checkWinner(finalMove)){
+            winner = currentPlayer;
+            gameState = GameState.ENDED;
+        }
+        else if(moves.size() == board.getDimension() * board.getDimension()){
+            gameState = GameState.DRAW;
+        }
+
+    }
+    private boolean checkWinner(Move move){
+        for(WinningStrategy winningStrategy :winningStrategies){
+            if(winningStrategy.checkWinner(board, move)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class Builder{
